@@ -10,104 +10,101 @@ using RolesAuth.Models;
 
 namespace RolesAuth.Controllers
 {
-    public class CafeEntitiesController : Controller
+    public class CategoriesEntitiesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public CafeEntitiesController(AppDbContext context)
+        public CategoriesEntitiesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: CafeEntities
+        // GET: CategoriesEntities
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Cafes.Include(c => c.User);
-            return View(await appDbContext.ToListAsync());
+              return _context.Categories != null ? 
+                          View(await _context.Categories.ToListAsync()) :
+                          Problem("Entity set 'AppDbContext.Categories'  is null.");
         }
 
-        // GET: CafeEntities/Details/5
+        // GET: CategoriesEntities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Cafes == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var cafeEntity = await _context.Cafes
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cafeEntity == null)
+            var categoriesEntity = await _context.Categories
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            if (categoriesEntity == null)
             {
                 return NotFound();
             }
 
-            return View(cafeEntity);
+            return View(categoriesEntity);
         }
 
-        // GET: CafeEntities/Create
+        // GET: CategoriesEntities/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
             return View();
         }
 
-        // POST: CafeEntities/Create
+        // POST: CategoriesEntities/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Address,UserId")] CafeEntity cafeEntity)
+        public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] CategoriesEntity categoriesEntity)
         {
-            if (ModelState.IsValid)
+           
             {
-                _context.Add(cafeEntity);
+                _context.Add(categoriesEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cafeEntity.UserId);
-            return View(cafeEntity);
+            return View(categoriesEntity);
         }
 
-        // GET: CafeEntities/Edit/5
+        // GET: CategoriesEntities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Cafes == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var cafeEntity = await _context.Cafes.FindAsync(id);
-            if (cafeEntity == null)
+            var categoriesEntity = await _context.Categories.FindAsync(id);
+            if (categoriesEntity == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cafeEntity.UserId);
-            return View(cafeEntity);
+            return View(categoriesEntity);
         }
 
-        // POST: CafeEntities/Edit/5
+        // POST: CategoriesEntities/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Address,UserId")] CafeEntity cafeEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description")] CategoriesEntity categoriesEntity)
         {
-            if (id != cafeEntity.Id)
+            if (id != categoriesEntity.CategoryId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            
             {
                 try
                 {
-                    _context.Update(cafeEntity);
+                    _context.Update(categoriesEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CafeEntityExists(cafeEntity.Id))
+                    if (!CategoriesEntityExists(categoriesEntity.CategoryId))
                     {
                         return NotFound();
                     }
@@ -118,51 +115,49 @@ namespace RolesAuth.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cafeEntity.UserId);
-            return View(cafeEntity);
+            return View(categoriesEntity);
         }
 
-        // GET: CafeEntities/Delete/5
+        // GET: CategoriesEntities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Cafes == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var cafeEntity = await _context.Cafes
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cafeEntity == null)
+            var categoriesEntity = await _context.Categories
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            if (categoriesEntity == null)
             {
                 return NotFound();
             }
 
-            return View(cafeEntity);
+            return View(categoriesEntity);
         }
 
-        // POST: CafeEntities/Delete/5
+        // POST: CategoriesEntities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Cafes == null)
+            if (_context.Categories == null)
             {
-                return Problem("Entity set 'AppDbContext.Cafes'  is null.");
+                return Problem("Entity set 'AppDbContext.Categories'  is null.");
             }
-            var cafeEntity = await _context.Cafes.FindAsync(id);
-            if (cafeEntity != null)
+            var categoriesEntity = await _context.Categories.FindAsync(id);
+            if (categoriesEntity != null)
             {
-                _context.Cafes.Remove(cafeEntity);
+                _context.Categories.Remove(categoriesEntity);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CafeEntityExists(int id)
+        private bool CategoriesEntityExists(int id)
         {
-          return (_context.Cafes?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
         }
     }
 }

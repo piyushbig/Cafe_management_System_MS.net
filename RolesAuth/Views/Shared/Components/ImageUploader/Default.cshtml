@@ -1,0 +1,42 @@
+﻿@model string
+
+<div class="form-group">
+    <label asp-for="@Model" class="control-label"></label>
+    <div class="custom-file">
+        <input asp-for="@Model" type="file" name="@Model" class="custom-file-input" id="FLFrontImage"
+               onchange="document.getElementById('FrontImagePrv').src = window.URL.createObjectURL(this.files[0])">
+        <label class="custom-file-label" for="FLFrontImage">Choose file</label>
+    </div>
+    @* <span asp-validation-for="@Model" class="text-danger"></span> *@
+
+    <label id="@Model-size" class="control-label">Size</label>
+
+    @Html.ValidationMessage(Model, new { id = "testId", @class = "text-danger" })
+
+    <img id="FrontImagePrv" src="" alt="Logo Image" width="120"
+         height="150" style="border:1px ; margin-top: 20px; margin-left:120px;" />
+</div>
+
+@* <script type="text/javascript">
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script> *@
+
+<script type="text/javascript" on-content-loaded="true">
+    var ImgUploads = document.getElementsByClassName("custom-file-input");
+    for (let i = 0; i < ImgUploads.length; i++) {
+        ImgUploads[i].addEventListener("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+            var attach_id = this.id;
+            var fsize = $('#' + attach_id)[0].files[0].size;
+            const file = Math.round((fsize / 1024));
+            document.getElementById('@Model-size').innerText = 'File Size ' + file + ' KB';
+        });
+
+    }
+
+</script>

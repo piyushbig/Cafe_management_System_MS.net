@@ -6,7 +6,7 @@ using RolesAuth.Data;
 
 namespace RolesAuth.Controllers
 {
-    [Authorize (Roles ="Admin")]
+    //[Authorize (Roles ="Admin")]
     public class AppRolesController : Controller
     {
         

@@ -126,12 +126,27 @@ namespace RolesAuth.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+            var isAdmin = User.IsInRole("Admin");
+
+            //Input = new InputModel()
+            //{
+            //    RoleList = isAdmin
+            //        ? roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+            //        {
+            //            Text = i,
+            //            Value = i
+            //        })
+            //        : new List<SelectListItem>
+            //          {
+            //      new SelectListItem { Text = "Customer", Value = "Customer" }
+            //          }
+            //};
             Input = new InputModel()
             {
                 RoleList = roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
                 {
-                    Text=i,
-                    Value=i
+                    Text = i,
+                    Value = i
                 })
             };
         }
@@ -156,6 +171,21 @@ namespace RolesAuth.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     await _userManager.AddToRoleAsync(user,Input.Role);
+                    // Create specific details based on the role
+                    if (Input.Role == "Cafe")
+                    {
+                        user.CafeDetails = new CafeEntity { Name = Input.Name,Address=Input.Address,Email=Input.Email };
+                    }
+                    else if (Input.Role == "Customer")
+                    {
+                        user.CustomerDetails = new CustomerEntity { Name = Input.Name, Address = Input.Address, Email = Input.Email };
+                    }
+                    else if (Input.Role == "Admin")
+                    {
+                        // Handle admin-specific details...
+                    }
+
+                    await _userManager.UpdateAsync(user);
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

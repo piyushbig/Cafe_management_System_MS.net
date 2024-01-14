@@ -241,13 +241,91 @@ namespace RolesAuth.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Cafes");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CategoriesEntity", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CustomerEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("CustomerEntity");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Prize")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("RolesAuth.Models.ApplicationUser", b =>
@@ -313,6 +391,52 @@ namespace RolesAuth.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.ApplicationUser", "User")
+                        .WithOne("CafeDetails")
+                        .HasForeignKey("RolesAuth.Models.CafeEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CustomerEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.ApplicationUser", "User")
+                        .WithOne("CustomerDetails")
+                        .HasForeignKey("RolesAuth.Models.CustomerEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.CategoriesEntity", "Category")
+                        .WithMany("products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CategoriesEntity", b =>
+                {
+                    b.Navigation("products");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("CafeDetails")
+                        .IsRequired();
+
+                    b.Navigation("CustomerDetails")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

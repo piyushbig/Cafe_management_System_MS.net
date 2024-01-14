@@ -2,7 +2,89 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model IEnumerable<RolesAuth.Models.ProductEntity>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px; /* Add margin to the top of the card container */
+        }
+
+        .card {
+            width: calc(33.333% - 20px); /* Adjust the width of each card (33.333% - 20px margin) */
+            margin-bottom: 20px; /* Add margin to the bottom of each card */
+            margin-left: 30px;
+            margin-right: 30px;
+            background-color: #325f53;
+        }
+        img{
+            margin-top:10px;
+        }
+        
+
+    </style>
+</head>
+<div class="homePageContainer">
+
+    <div class="leftContent">
+        <h1 class="enlargedBlueText">Take a cup and forget about everything for a few minutes.</h1>
+        <p class="simple">Get Your Coffee Online Today..</p>
+    </div>
+
+
+    <div class="rightContent imgHome">
+        <img src="https://cdni.iconscout.com/illustration/premium/thumb/coffee-shop-receiving-online-order-5507850-4608589.png?f=webp" alt="Sample" class="image" />
+    </div>
 </div>
+
+
+@* Added-items *@
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            @* <div class="col-md-4 mb-4">
+    <!-- Adjust the column width -->
+    <div class="card h-50">
+    <!-- Set a fixed height for the cards -->
+    <img src="@item.ImageUrl" class="card-img-top" alt="Item Image">
+    <div class="card-body">
+    <h5 class="card-title">@item.Name</h5>
+    <p class="card-text">Category: @item.Category</p>
+    <p class="card-text">@item.Description</p>
+    <p class="card-text">Price: @item.Price.ToString("C2")</p>
+    <a href="#" class="btn btn-primary">Add to Cart</a>
+    </div>
+    </div>
+    </div> *@
+            <div class="card" style="width: 18rem; margin-bottom: 20px;">
+              
+                <img src="~/Images/@item.ImageUrl"  />
+                <div class="card-body ">
+                    <div class="d-flex justify-content-between">
+
+                        <h5 class="card-title text-light " style="color: #5F8670"><b>Category:</b> @item.Category.Name</h5>
+
+                        <p class="card-text fst-italic text-light "><b>Product:</b> @item.Name</p>
+                    </div>
+                    <p class="card-text  text-light "><b>Description:</b> @item.Category.Description</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="#" class="btn btn-secondary bg-danger">Add to Cart</a>
+                        <p class="card-text fw-bold text-light"><b>Price:</b> ₹ @item.Prize</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No items found.</p>
+}

@@ -6,5 +6,9 @@ namespace RolesAuth.Models
     {
         public string Name { get; set; }
         public string Address { get; set; }
+
+        public CafeEntity CafeDetails { get; set; }
+
+        public CustomerEntity CustomerDetails { get; set; }
     }
 }

@@ -16,3 +16,71 @@ html {
 body {
   margin-bottom: 60px;
 }
+.navbar-logo {
+    height: 40px; /* Set the height of the logo */
+    width: auto; /* Allow the width to adjust based on the height */
+    margin-right: 10px; /* Add spacing between the logo and text */
+}
+.navbar-brand {
+    color: #ffb468; /* Set the font color of the brand */
+
+    font-weight: bold; /* Set the font weight */
+    font-size: 24px; /* Set the font size */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center the logo vertically */
+    font-family: "Segoe Script" /* Set the font family */
+}
+
+/* CafeApp.styles.css */
+body, html {
+    height: 100%;
+    
+}
+
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;
+    align-items: center;*/
+   
+    
+    
+}
+
+.homePageContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Add margin to the bottom of the home page container */
+}
+
+.leftContent {
+    flex: 1;
+    padding: 20px;
+}
+
+.rightContent {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+.enlargedBlueText {
+    color: #007bff; /* Set the color to blue */
+    font-size: 24px; /* Set the font size */
+}
+
+.simple {
+    font-size: 18px; /* Set the font size */
+}
+
+.imgHome {
+    max-width: 50%; /* Limit the width of the image */
+}
+
+.image {
+    max-width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+}
