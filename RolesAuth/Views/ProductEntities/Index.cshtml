@@ -24,10 +24,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Prize)
             </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cafe)
+            </th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -46,13 +50,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Prize)
             </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                <a class = "btn btn-sm btn-info " asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a class = "btn btn-sm btn-primary ml-1 "asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a class = "btn btn-sm btn-danger ml-1"asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Cafe.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
             </td>
         </tr>
 }

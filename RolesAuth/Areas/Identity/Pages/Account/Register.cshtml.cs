@@ -128,27 +128,27 @@ namespace RolesAuth.Areas.Identity.Pages.Account
 
             var isAdmin = User.IsInRole("Admin");
 
-            //Input = new InputModel()
-            //{
-            //    RoleList = isAdmin
-            //        ? roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-            //        {
-            //            Text = i,
-            //            Value = i
-            //        })
-            //        : new List<SelectListItem>
-            //          {
-            //      new SelectListItem { Text = "Customer", Value = "Customer" }
-            //          }
-            //};
             Input = new InputModel()
             {
-                RoleList = roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-                {
-                    Text = i,
-                    Value = i
-                })
+                RoleList = isAdmin
+                    ? roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                    {
+                        Text = i,
+                        Value = i
+                    })
+                    : new List<SelectListItem>
+                      {
+                  new SelectListItem { Text = "Customer", Value = "Customer" }
+                      }
             };
+            //Input = new InputModel()
+            //{
+            //    RoleList = roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+            //    {
+            //        Text = i,
+            //        Value = i
+            //    })
+            //};
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

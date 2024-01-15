@@ -3,13 +3,62 @@
 @{
     ViewData["Title"] = "Register";
 }
+@{
+    var backgroundImageUrl = "https://img.freepik.com/free-photo/high-angle-shot-coffee-beans-jars-breakfast-table-with-some-pastry_181624-5864.jpg";
+}
+@* <head>
+    <style>
+        .row{
+            align-content: center;
+            justify-content: center;
+            display: flex;
+            text-align: center;
 
-<h1>@ViewData["Title"]</h1>
+        }
+
+        .form-floating {
+            margin-bottom: 10px;
+        }
+    </style>
+</head> *@
+<head>
+
+    <style>
+        /* Define your CSS styles here */
+        .backgroundImageStyle {
+            background-image: url('@backgroundImageUrl');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .row {
+            /*             background-color: rgba(255, 255, 255, 0.6); */
+            margin: 60px;
+            /* margin: 0 auto;
+                    margin-top: 50px;
+                    margin-bottom: 50px; */
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color: burlywood;
+        }
+
+        h2 {
+            background-color: #325f53;
+            border-radius:7px;
+        }
+    </style>
+</head>
+
+<div class="backgroundImageStyle">
+
 
 <div class="row">
+    <h2>@ViewData["Title"]</h2>
     <div class="col-md-4">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
+            
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
@@ -79,6 +128,7 @@
             }
         </section>
     </div> *@
+</div>
 </div>
 
 @section Scripts {

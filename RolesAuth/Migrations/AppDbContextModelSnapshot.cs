@@ -225,7 +225,7 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CafeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -244,7 +244,7 @@ namespace RolesAuth.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CafeId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -307,6 +307,9 @@ namespace RolesAuth.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("CafeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -322,6 +325,8 @@ namespace RolesAuth.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("CafeId");
 
                     b.HasIndex("CategoryId");
 
@@ -417,13 +422,26 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
                 {
+                    b.HasOne("RolesAuth.Models.CafeEntity", "Cafe")
+                        .WithMany("products")
+                        .HasForeignKey("CafeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RolesAuth.Models.CategoriesEntity", "Category")
                         .WithMany("products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Cafe");
+
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
+                {
+                    b.Navigation("products");
                 });
 
             modelBuilder.Entity("RolesAuth.Models.CategoriesEntity", b =>

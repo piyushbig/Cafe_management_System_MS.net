@@ -17,22 +17,17 @@ namespace RolesAuth.Controllers
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public ProductEntitiesController(AppDbContext context, IWebHostEnvironment webHost)
+        public ProductEntitiesController(AppDbContext context,IWebHostEnvironment webHost)
         {
             _context = context;
-            this.webHostEnvironment = webHost;
+            webHostEnvironment = webHost;
         }
 
         // GET: ProductEntities
-        //public async Task<IActionResult> Index()
-        //{
-        //    var appDbContext = _context.Products.Include(p => p.Category);
-        //    return View(await appDbContext.ToListAsync());
-        //}
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _context.Products.ToList(); // Fetch products from your database
-            return View(products);
+            var appDbContext = _context.Products.Include(p => p.Cafe).Include(p => p.Category);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: ProductEntities/Details/5
@@ -44,6 +39,7 @@ namespace RolesAuth.Controllers
             }
 
             var productEntity = await _context.Products
+                .Include(p => p.Cafe)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (productEntity == null)
@@ -52,7 +48,6 @@ namespace RolesAuth.Controllers
             }
 
             return View(productEntity);
-
         }
         public string UploadedFile(ProductEntity product)
         {
@@ -75,26 +70,30 @@ namespace RolesAuth.Controllers
         // GET: ProductEntities/Create
         public IActionResult Create()
         {
+            ViewData["CafeId"] = new SelectList(_context.Cafes, "CafeId", "CafeId");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
             return View();
         }
 
-        // POST: ProductEntities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ProductId,Name,Prize,CategoryId")] ProductEntity productEntity)
-        //{
+        //POST: ProductEntities/Create
+        //To protect from overposting attacks, enable the specific properties you want to bind to.
+        //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 
-        //    {
-        //        _context.Add(productEntity);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", productEntity.CategoryId);
-        //    return View(productEntity);
-        //}
+        //[HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Create([Bind("ProductId,Name,Prize,ImageUrl,CategoryId,CafeId")] ProductEntity productEntity)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         _context.Add(productEntity);
+        //         await _context.SaveChangesAsync();
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     ViewData["CafeId"] = new SelectList(_context.Cafes, "CafeId", "CafeId", productEntity.CafeId);
+        //     ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", productEntity.CategoryId);
+        //     return View(productEntity);
+        // }
+
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ProductEntity product)
@@ -110,7 +109,6 @@ namespace RolesAuth.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // GET: ProductEntities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -124,6 +122,7 @@ namespace RolesAuth.Controllers
             {
                 return NotFound();
             }
+            ViewData["CafeId"] = new SelectList(_context.Cafes, "CafeId", "CafeId", productEntity.CafeId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", productEntity.CategoryId);
             return View(productEntity);
         }
@@ -133,7 +132,7 @@ namespace RolesAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Prize,CategoryId")] ProductEntity productEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Prize,ImageUrl,CategoryId,CafeId")] ProductEntity productEntity)
         {
             if (id != productEntity.ProductId)
             {
@@ -160,6 +159,7 @@ namespace RolesAuth.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CafeId"] = new SelectList(_context.Cafes, "CafeId", "CafeId", productEntity.CafeId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", productEntity.CategoryId);
             return View(productEntity);
         }
@@ -173,6 +173,7 @@ namespace RolesAuth.Controllers
             }
 
             var productEntity = await _context.Products
+                .Include(p => p.Cafe)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (productEntity == null)

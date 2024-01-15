@@ -24,10 +24,22 @@
             @Html.DisplayFor(model => model.Prize)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ImageUrl)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Category.CategoryId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cafe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cafe.CafeId)
         </dd>
     </dl>
     

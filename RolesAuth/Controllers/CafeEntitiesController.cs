@@ -36,7 +36,7 @@ namespace RolesAuth.Controllers
 
             var cafeEntity = await _context.Cafes
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.CafeId == id);
             if (cafeEntity == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace RolesAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Address,UserId")] CafeEntity cafeEntity)
+        public async Task<IActionResult> Create([Bind("CafeId,Name,Email,Address,UserId")] CafeEntity cafeEntity)
         {
             if (ModelState.IsValid)
             {
@@ -91,9 +91,9 @@ namespace RolesAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Address,UserId")] CafeEntity cafeEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("CafeId,Name,Email,Address,UserId")] CafeEntity cafeEntity)
         {
-            if (id != cafeEntity.Id)
+            if (id != cafeEntity.CafeId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace RolesAuth.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CafeEntityExists(cafeEntity.Id))
+                    if (!CafeEntityExists(cafeEntity.CafeId))
                     {
                         return NotFound();
                     }
@@ -132,7 +132,7 @@ namespace RolesAuth.Controllers
 
             var cafeEntity = await _context.Cafes
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.CafeId == id);
             if (cafeEntity == null)
             {
                 return NotFound();
@@ -162,7 +162,7 @@ namespace RolesAuth.Controllers
 
         private bool CafeEntityExists(int id)
         {
-          return (_context.Cafes?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Cafes?.Any(e => e.CafeId == id)).GetValueOrDefault();
         }
     }
 }

@@ -19,5 +19,8 @@ namespace RolesAuth.Models
         public int CategoryId { get; set; } //forign key
 
         public CategoriesEntity Category { get; set; }
+
+        public int CafeId { get; set; }
+        public CafeEntity Cafe { get; set; }
     }
 }

@@ -223,7 +223,7 @@ namespace RolesAuth.Migrations
                 name: "Cafes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CafeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -236,7 +236,7 @@ namespace RolesAuth.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cafes", x => x.Id);
+                    table.PrimaryKey("PK_Cafes", x => x.CafeId);
                     table.ForeignKey(
                         name: "FK_Cafes_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -282,11 +282,20 @@ namespace RolesAuth.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Prize = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CafeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Products_Cafes_CafeId",
+                        column: x => x.CafeId,
+                        principalTable: "Cafes",
+                        principalColumn: "CafeId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -346,6 +355,11 @@ namespace RolesAuth.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_CafeId",
+                table: "Products",
+                column: "CafeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -370,9 +384,6 @@ namespace RolesAuth.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cafes");
-
-            migrationBuilder.DropTable(
                 name: "CustomerEntity");
 
             migrationBuilder.DropTable(
@@ -382,10 +393,13 @@ namespace RolesAuth.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Cafes");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

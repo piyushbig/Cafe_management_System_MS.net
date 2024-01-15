@@ -24,9 +24,19 @@
                 <span asp-validation-for="Prize" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CafeId" class="control-label"></label>
+                <select asp-for="CafeId" class="form-control" asp-items="ViewBag.CafeId"></select>
+                <span asp-validation-for="CafeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

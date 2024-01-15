@@ -1,0 +1,69 @@
+﻿@{
+    var backgroundImageUrl = "https://img.freepik.com/free-photo/high-angle-shot-coffee-beans-jars-breakfast-table-with-some-pastry_181624-5864.jpg";
+
+    // Define team members using C# syntax
+    var teamMembers = new[]
+    {
+        new { Name = "Piyush Shitole", Email = "Piyush@gmail.com" },
+        new { Name = "Ashwini Ugale", Email = "Ashwini@gmail.com" },
+        new { Name = "Krishna Doshi", Email = "Krishna@gmail.com" },
+        new { Name = "Shaina", Email = "Shaina@gmail.com" },
+        new { Name = "Balram Melkunde", Email = "Balram@gmail.com" }
+    };
+}
+
+
+<head>
+    <title>Contact Us</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <!-- Add any other stylesheets or scripts needed -->
+    <style>
+        /* Define your CSS styles here */
+        .backgroundImageStyle {
+            background-image: url('@backgroundImageUrl');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+           
+        }
+
+        .contentStyle {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 50px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="backgroundImageStyle">
+        <div class="contentStyle">
+            <h1>Contact Us</h1>
+            <div class="row">
+                @foreach (var member in teamMembers)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">@member.Name</h5>
+                                <p class="card-text">Email: @member.Email</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS and any other scripts -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add any other scripts needed -->
+</body>
+

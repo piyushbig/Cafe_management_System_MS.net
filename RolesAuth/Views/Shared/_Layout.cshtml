@@ -6,7 +6,9 @@
     <title>@ViewData["Title"] - CafeTO</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  
     <link rel="stylesheet" href="~/RolesAuth.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -29,12 +31,18 @@
                         <li class="nav-item">
                             <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="AboutUs">AboutUs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
+                        </li>
                         @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CafeEntities" asp-action="Index">Cafes</a>
                         </li> *@
-                        @* <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="AppRoles" asp-action="Index">Roles</a>
-                        </li> *@
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -46,12 +54,13 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
+    <partial name="Footer" />
+    @* <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - RolesAuth - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+@{
+    var backgroundImageUrl = "https://img.freepik.com/free-photo/high-angle-shot-coffee-beans-jars-breakfast-table-with-some-pastry_181624-5864.jpg";
+}
+
+
+<head>
+    <title>About Us</title>
+    <style>
+        /* Define your CSS styles here */
+        .backgroundImageStyle {
+            background-image: url('@backgroundImageUrl');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            
+        }
+
+        .contentStyle {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="backgroundImageStyle">
+        <div class="contentStyle">
+            <div class="text-center">
+                <h2>About Us</h2>
+            </div>
+            <h4>WHO ARE WE ?</h4>
+            <p>
+                It happens millions of times each week – a customer receives a drink from
+                a Cafeto – but each interaction is unique. It’s just a moment in time –
+                just one hand reaching over the counter to present a cup to another
+                outstretched hand. But it’s a connection....
+            </p>
+            <p>
+                We make sure everything we do honors that connection – from our commitment
+                to the highest quality coffee in the world, to the way we engage with our
+                customers and communities to do business responsibly. From our beginnings
+                as a single store over forty years ago, in every place that we’ve been,
+                and every place that we touch, we've tried to make it a little better than
+                we found it.
+            </p>
+        </div>
+    </div>
+</body>
+

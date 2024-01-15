@@ -58,7 +58,7 @@ namespace RolesAuth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] CategoriesEntity categoriesEntity)
         {
-           
+            //if (ModelState.IsValid)
             {
                 _context.Add(categoriesEntity);
                 await _context.SaveChangesAsync();
@@ -95,7 +95,7 @@ namespace RolesAuth.Controllers
                 return NotFound();
             }
 
-            
+            //if (ModelState.IsValid)
             {
                 try
                 {
