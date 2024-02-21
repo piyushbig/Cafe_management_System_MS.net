@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RolesAuth.Data;
 using Microsoft.AspNetCore.Identity;
+using Stripe;
 
 namespace RolesAuth
 {
@@ -38,6 +39,8 @@ namespace RolesAuth
             app.UseRouting();
                         app.UseAuthentication();;
 
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<String>();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -45,6 +48,8 @@ namespace RolesAuth
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
             app.Run();
+
+
         }
     }
 }

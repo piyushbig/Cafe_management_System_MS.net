@@ -11,6 +11,12 @@ namespace RolesAuth.Data
         }
 
         public DbSet<CafeEntity> Cafes { get; set; }
+
+        public DbSet<BillEntity> Bill { get; set; }
+
+        public DbSet<OrderEntity> Order { get; set; }
+
+        public DbSet<OrderItemEntity> OrderItem { get; set; }
         public DbSet<CustomerEntity> Customer { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }

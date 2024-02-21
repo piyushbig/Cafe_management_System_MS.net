@@ -95,8 +95,8 @@ namespace RolesAuth.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 try
                 {
                     _context.Update(cartItems);
@@ -114,7 +114,7 @@ namespace RolesAuth.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            /*}*/
             return View(cartItems);
         }
 
