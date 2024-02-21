@@ -7,6 +7,8 @@ namespace RolesAuth.Models
     {
         [Key]
         public int ProductId { get; set; }
+        public int CafeId { get; set; }
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public int Prize { get; set; }
 
@@ -16,11 +18,15 @@ namespace RolesAuth.Models
         [NotMapped]
         public IFormFile Image { get; set; }
 
-        public int CategoryId { get; set; } //forign key
+        
+
+        
+       //forign key
 
         public CategoriesEntity Category { get; set; }
 
-        public int CafeId { get; set; }
+        
         public CafeEntity Cafe { get; set; }
+        public OrderItemEntity OrderItem { get; set; }
     }
 }

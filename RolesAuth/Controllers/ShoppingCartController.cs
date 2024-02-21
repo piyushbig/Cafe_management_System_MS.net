@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RolesAuth.Data;
 using RolesAuth.Models;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace RolesAuth.Controllers
 {
+
+    [Authorize]
     public class ShoppingCartController : Controller
 
-        
+
     {
 
         private readonly AppDbContext dbContext;
@@ -128,5 +132,74 @@ namespace RolesAuth.Controllers
                 return View();
             }
         }
+
+        public IActionResult OrderConfirmation()
+        {
+            var service = new SessionService();
+            Session session = service.Get(TempData["Session"].ToString());
+
+            if (session.PaymentStatus == "paid")
+            {
+                var transaction = session.PaymentIntentId.ToString();
+                return View("success");
+            }
+
+            return View("login");
+        }
+
+        public IActionResult success()
+        {
+            return View();
+        }
+
+        public IActionResult login()
+        {
+            return View();
+        }
+
+        public IActionResult CheckOut()
+        {
+            List<CartItems> cartItems = dbContext.CartItems?.ToList() ?? new List<CartItems>();
+
+            var domain = "https://localhost:7211/";
+
+            var options = new SessionCreateOptions
+            {
+                SuccessUrl = domain + $"ShoppingCart/OrderConfirmation",
+                CancelUrl = domain + "ShoppingCart/Login",
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment"
+            };
+
+
+            foreach (var item in cartItems)
+            {
+                var sessionListItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Price * item.Quantity*100),
+                        Currency = "inr",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.CartFood_name?.ToString() ?? "Product Name Not Available", // Handle if Product is null
+                        }
+                    },
+                    Quantity = 1 // item.Quantity
+                };
+
+                options.LineItems.Add(sessionListItem);
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            TempData["Session"] = session.Id;
+
+            Response.Headers.Add("Location", session.Url);
+
+            return new StatusCodeResult(303);
+        }
     }
-}
+
+    }

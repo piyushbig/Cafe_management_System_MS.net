@@ -11,8 +11,8 @@ using RolesAuth.Data;
 namespace RolesAuth.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240221110900_carts")]
-    partial class carts
+    [Migration("20240221153227_entities")]
+    partial class entities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,6 +226,26 @@ namespace RolesAuth.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("RolesAuth.Models.BillEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("Bill");
+                });
+
             modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
                 {
                     b.Property<int>("CafeId")
@@ -343,6 +363,56 @@ namespace RolesAuth.Migrations
                     b.ToTable("CustomerEntity");
                 });
 
+            modelBuilder.Entity("RolesAuth.Models.OrderEntity", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("double");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.OrderItemEntity", b =>
+                {
+                    b.Property<long>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Subtotal")
+                        .HasColumnType("double");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("OrderItem");
+                });
+
             modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
                 {
                     b.Property<int>("ProductId")
@@ -441,6 +511,17 @@ namespace RolesAuth.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RolesAuth.Models.BillEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.OrderEntity", "Order")
+                        .WithOne("Bill")
+                        .HasForeignKey("RolesAuth.Models.BillEntity", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
                 {
                     b.HasOne("RolesAuth.Models.ApplicationUser", "User")
@@ -481,6 +562,36 @@ namespace RolesAuth.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RolesAuth.Models.OrderEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.OrderItemEntity", b =>
+                {
+                    b.HasOne("RolesAuth.Models.OrderEntity", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RolesAuth.Models.ProductEntity", "Product")
+                        .WithOne("OrderItem")
+                        .HasForeignKey("RolesAuth.Models.OrderItemEntity", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
                 {
                     b.HasOne("RolesAuth.Models.CafeEntity", "Cafe")
@@ -513,6 +624,20 @@ namespace RolesAuth.Migrations
             modelBuilder.Entity("RolesAuth.Models.CustomerEntity", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.OrderEntity", b =>
+                {
+                    b.Navigation("Bill")
+                        .IsRequired();
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
+                {
+                    b.Navigation("OrderItem")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RolesAuth.Models.ApplicationUser", b =>
