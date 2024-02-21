@@ -19,6 +19,8 @@ namespace RolesAuth.Data
 
         public DbSet<ProductEntity> Products { get; set; }
 
+        public DbSet<CartItems> CartItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

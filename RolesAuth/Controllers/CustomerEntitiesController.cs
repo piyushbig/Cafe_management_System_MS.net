@@ -36,7 +36,7 @@ namespace RolesAuth.Controllers
 
             var customerEntity = await _context.CustomerEntity
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customerEntity == null)
             {
                 return NotFound();
@@ -93,7 +93,7 @@ namespace RolesAuth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Address,UserId")] CustomerEntity customerEntity)
         {
-            if (id != customerEntity.Id)
+            if (id != customerEntity.CustomerId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace RolesAuth.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerEntityExists(customerEntity.Id))
+                    if (!CustomerEntityExists(customerEntity.CustomerId))
                     {
                         return NotFound();
                     }
@@ -132,7 +132,7 @@ namespace RolesAuth.Controllers
 
             var customerEntity = await _context.CustomerEntity
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customerEntity == null)
             {
                 return NotFound();
@@ -162,7 +162,7 @@ namespace RolesAuth.Controllers
 
         private bool CustomerEntityExists(int id)
         {
-          return (_context.CustomerEntity?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.CustomerEntity?.Any(e => e.CustomerId == id)).GetValueOrDefault();
         }
     }
 }

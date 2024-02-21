@@ -33,7 +33,7 @@ namespace RolesAuth.Controllers
         // GET: ProductEntities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || _context.Products== null)
             {
                 return NotFound();
             }

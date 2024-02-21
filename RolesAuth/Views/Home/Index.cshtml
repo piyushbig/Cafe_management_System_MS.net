@@ -70,21 +70,26 @@
     <a href="#" class="btn btn-primary">Add to Cart</a>
     </div>
     </div>
-    </div> *@
+    </div> 
+    *@
             <div class="card mt-5" style="width: 18rem;">
-              
-                <img src="~/Images/@item.ImageUrl"  />
+
+                <img src="~/Images/@item.ImageUrl" />
                 <div class="card-body ">
                     <div class="d-flex justify-content-between">
                         @* <h5 class="card-title text-light " style="color: #5F8670"><b>Cafe:</b> @item.Cafe?.Name</h5>
- *@
+                *@
                         <h5 class="card-title text-light " style="color: #5F8670"><b>Category:</b> @item.Category.Name</h5>
 
                         <p class="card-text fst-italic text-light "><b>Product:</b> @item.Name</p>
+                        <p class="card-text fst-italic text-light "><b>Cafe:</b> @item.CafeId</p>
                     </div>
                     <p class="card-text  text-light "><b>Description:</b> @item.Category.Description</p>
                     <div class="d-flex justify-content-between mt-3">
-                        <a href="#" class="btn btn-secondary bg-danger">Add to Cart</a>
+                        <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-secondary bg-danger">Add to Cart</button>
+                        </form>
                         <p class="card-text fw-bold text-light"><b>Price:</b> ₹ @item.Prize</p>
                     </div>
                 </div>
