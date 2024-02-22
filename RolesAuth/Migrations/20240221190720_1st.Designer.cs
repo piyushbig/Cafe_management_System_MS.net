@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RolesAuth.Data;
 
@@ -10,9 +11,11 @@ using RolesAuth.Data;
 namespace RolesAuth.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221190720_1st")]
+    partial class _1st
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,9 +369,6 @@ namespace RolesAuth.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CafeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -393,8 +393,6 @@ namespace RolesAuth.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("CafeId");
 
                     b.HasIndex("CustomerId");
 
@@ -582,12 +580,6 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.OrderEntity", b =>
                 {
-                    b.HasOne("RolesAuth.Models.CafeEntity", "Cafe")
-                        .WithMany("orders")
-                        .HasForeignKey("CafeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RolesAuth.Models.CustomerEntity", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
@@ -599,8 +591,6 @@ namespace RolesAuth.Migrations
                         .HasForeignKey("RolesAuth.Models.OrderEntity", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cafe");
 
                     b.Navigation("Customer");
 
@@ -647,8 +637,6 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
                 {
-                    b.Navigation("orders");
-
                     b.Navigation("products");
                 });
 

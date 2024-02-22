@@ -17,5 +17,6 @@ namespace RolesAuth.Models
         public ApplicationUser User { get; set; }
 
         public ICollection<ProductEntity> products { get; set; }
+        public ICollection<OrderEntity> orders { get; set; }
     }
 }

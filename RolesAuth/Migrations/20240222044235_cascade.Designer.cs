@@ -11,8 +11,8 @@ using RolesAuth.Data;
 namespace RolesAuth.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240221153227_entities")]
-    partial class entities
+    [Migration("20240222044235_cascade")]
+    partial class cascade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -369,10 +369,27 @@ namespace RolesAuth.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("CafeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Food_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalAmount")
@@ -380,7 +397,12 @@ namespace RolesAuth.Migrations
 
                     b.HasKey("OrderId");
 
+                    b.HasIndex("CafeId");
+
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.ToTable("Order");
                 });
@@ -407,8 +429,7 @@ namespace RolesAuth.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItem");
                 });
@@ -564,13 +585,29 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.OrderEntity", b =>
                 {
+                    b.HasOne("RolesAuth.Models.CafeEntity", "Cafe")
+                        .WithMany("orders")
+                        .HasForeignKey("CafeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RolesAuth.Models.CustomerEntity", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RolesAuth.Models.ProductEntity", "Product")
+                        .WithOne("Order")
+                        .HasForeignKey("RolesAuth.Models.OrderEntity", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cafe");
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("RolesAuth.Models.OrderItemEntity", b =>
@@ -582,8 +619,8 @@ namespace RolesAuth.Migrations
                         .IsRequired();
 
                     b.HasOne("RolesAuth.Models.ProductEntity", "Product")
-                        .WithOne("OrderItem")
-                        .HasForeignKey("RolesAuth.Models.OrderItemEntity", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -613,6 +650,8 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.CafeEntity", b =>
                 {
+                    b.Navigation("orders");
+
                     b.Navigation("products");
                 });
 
@@ -636,7 +675,7 @@ namespace RolesAuth.Migrations
 
             modelBuilder.Entity("RolesAuth.Models.ProductEntity", b =>
                 {
-                    b.Navigation("OrderItem")
+                    b.Navigation("Order")
                         .IsRequired();
                 });
 

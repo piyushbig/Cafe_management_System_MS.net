@@ -27,6 +27,6 @@ namespace RolesAuth.Models
 
         
         public CafeEntity Cafe { get; set; }
-        public OrderItemEntity OrderItem { get; set; }
+        public OrderEntity Order { get; set; }
     }
 }

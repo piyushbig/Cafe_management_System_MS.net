@@ -20,6 +20,8 @@ namespace RolesAuth.Models
         // Navigation properties
         public CustomerEntity Customer { get; set; }
         public ProductEntity Product { get; set; }
+
+
     }
 
 }

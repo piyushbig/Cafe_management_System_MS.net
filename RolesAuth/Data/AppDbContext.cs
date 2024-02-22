@@ -38,8 +38,18 @@ namespace RolesAuth.Data
                 .HasForeignKey<CafeEntity>(c => c.UserId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade); // Use DeleteBehavior.Cascade for automatic deletion
+
+            modelBuilder.Entity<CartItems>()
+               .HasOne(c => c.Customer)
+               .WithMany(u => u.CartItems)
+               .HasForeignKey(c => c.CustomerId)
+               .OnDelete(DeleteBehavior.Cascade); // Add this line for cascade delete
+
+            
         }
 
         public DbSet<RolesAuth.Models.CustomerEntity>? CustomerEntity { get; set; }
+
+        
     }
 }

@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RolesAuth.Data;
 using RolesAuth.Models;
+using Stripe;
 using Stripe.Checkout;
+using Stripe.Climate;
 using System.Security.Claims;
 
 namespace RolesAuth.Controllers
@@ -36,25 +38,35 @@ namespace RolesAuth.Controllers
             var currentUser = await dbContext.CustomerEntity
                 .FirstOrDefaultAsync(c => c.UserId == currentUserId);
 
-            var product = await dbContext.Products.FindAsync(productId);
+            
+
+            var product = dbContext.Products
+                .Include(p => p.Cafe) 
+                .Include(p=>p.Category)// Include the Cafe navigation property
+                .FirstOrDefault(p => p.ProductId == productId);
+
+            
 
             if (product != null)
             {
+                var cafe = product.Cafe;
                 // Example: Add the product to the cartitems table
+
                 var cartItem = new CartItems
                 {
                     ProductId = product.ProductId,
                     CustomerId = currentUser.CustomerId,
                     CartFood_name = product.Name,
-                    Cafe_name = "cafe",
-                    Category = "drink",
+                    Cafe_name = product.Cafe.Name,
+                    Category =product.Category?.Name?? "unknown",
                     Price = product.Prize,
                     Quantity = 1,
                     // other properties...
                 };
 
                 dbContext.CartItems.Add(cartItem);
-                dbContext.SaveChanges();
+              
+                dbContext.SaveChangesAsync();
 
                 // Redirect to the home page after adding to the cart
                 return RedirectToAction("Index", "CartItems");
@@ -147,8 +159,77 @@ namespace RolesAuth.Controllers
             return View("login");
         }
 
+        
+        [HttpPost]
+        public async Task<IActionResult> AddToOrders(int productId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Use await to asynchronously get the user
+            var currentUser = await dbContext.CustomerEntity
+                .FirstOrDefaultAsync(c => c.UserId == currentUserId);
+
+            if (currentUser == null)
+            {
+                // Handle the case where the user is not found
+                return RedirectToAction("UserNotFound", "Error");
+            }
+
+            var product = dbContext.Products
+                .Include(p => p.Cafe)
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.ProductId == productId);
+
+            if (product == null)
+            {
+                // Handle the case where the product is not found
+                return RedirectToAction("ProductNotFound", "Error");
+            }
+
+            List<CartItems> cartItems = dbContext.CartItems
+                .Where(item => item.CustomerId == currentUser.CustomerId)
+                .ToList();
+
+            var order = new OrderEntity
+            {
+                OrderStatus = OrderEntity.Status.PENDING,
+                TotalAmount = cartItems.Sum(item => item.Price * item.Quantity),
+                CustomerId = currentUser.CustomerId,
+                CafeId = product.CafeId,
+                Category = product.Category.Name,
+                Food_name = product.Name,
+            };
+
+            dbContext.Order.Add(order);
+            await dbContext.SaveChangesAsync(); // Use asynchronous SaveChanges
+
+            foreach (var cartItem in cartItems)
+            {
+                var orderItem = new OrderItemEntity
+                {
+                    OrderId = order.OrderId,
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    Subtotal = cartItem.Price * cartItem.Quantity,
+                };
+
+                dbContext.OrderItem.Add(orderItem);
+            }
+
+            await dbContext.SaveChangesAsync(); // Use asynchronous SaveChanges
+
+            dbContext.CartItems.RemoveRange(cartItems);
+            await dbContext.SaveChangesAsync(); // Use asynchronous SaveChanges
+
+            // Redirect to a success page or return some response
+            return RedirectToAction("OrderSuccess", "Order");
+        }
+
+
+
         public IActionResult success()
         {
+            
             return View();
         }
 
@@ -178,6 +259,7 @@ namespace RolesAuth.Controllers
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
+
                         UnitAmount = (long)(item.Price * item.Quantity*100),
                         Currency = "inr",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
